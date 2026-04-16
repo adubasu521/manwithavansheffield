@@ -1,0 +1,39 @@
+---
+import { siteConfig } from '../../data/site';
+
+interface Props {
+  headline: string;
+  description: string;
+  datePublished: string;
+  dateModified?: string;
+  image?: string;
+}
+
+const { headline, description, datePublished, dateModified, image } = Astro.props;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline,
+  description,
+  datePublished,
+  dateModified: dateModified || datePublished,
+  ...(image && { image: image.startsWith('http') ? image : `${siteConfig.url}${image}` }),
+  author: {
+    '@type': 'Organization',
+    name: siteConfig.name,
+    url: siteConfig.url,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: siteConfig.name,
+    url: siteConfig.url,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${siteConfig.url}/images/logo.png`,
+    },
+  },
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

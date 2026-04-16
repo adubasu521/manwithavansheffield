@@ -1,0 +1,168 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import HeroInner from '../../components/sections/HeroInner.astro';
+import FAQAccordion from '../../components/sections/FAQAccordion.astro';
+import CTASection from '../../components/sections/CTASection.astro';
+import RelatedServices from '../../components/sections/RelatedServices.astro';
+import SchemaService from '../../components/seo/SchemaService.astro';
+import SchemaFAQ from '../../components/seo/SchemaFAQ.astro';
+import Section from '../../components/ui/Section.astro';
+import Container from '../../components/ui/Container.astro';
+import Badge from '../../components/ui/Badge.astro';
+import { services, getServiceBySlug, getRelatedServices } from '../../data/services';
+import { siteConfig, affiliateUrl } from '../../data/site';
+
+export async function getStaticPaths() {
+  return services.map((service) => ({
+    params: { service: service.slug },
+  }));
+}
+
+const { service: slug } = Astro.params;
+const service = getServiceBySlug(slug)!;
+const related = getRelatedServices(service.relatedServices);
+
+const vanMap: Record<string, string> = {
+  'lwb': 'Long Wheelbase (LWB) Van',
+  'sprinter': 'Sprinter Van',
+  'luton': 'Luton Van',
+};
+---
+
+<BaseLayout
+  title={service.metaTitle}
+  description={service.metaDescription}
+  canonical={`https://manwithavansheffield.co.uk/services/${service.slug}`}
+>
+  <SchemaService service={service} slot="head" />
+  <SchemaFAQ faqs={service.faqs} slot="head" />
+
+  <HeroInner
+    title={service.heroHeading}
+    subtitle={service.description}
+    breadcrumbs={[
+      { label: 'Home', href: '/' },
+      { label: 'Services', href: '/services/' },
+      { label: service.name },
+    ]}
+  />
+
+  <!-- Intro + Features -->
+  <Section>
+    <Container>
+      <div class="grid lg:grid-cols-3 gap-12">
+        <div class="lg:col-span-2">
+          <h2 class="text-2xl font-bold text-neutral-900 font-heading mb-4">About This Service</h2>
+          <p class="text-lg text-neutral-600 leading-relaxed">{service.description}</p>
+
+          {service.seasonalNotes && (
+            <div class="mt-6 bg-secondary-50 border border-secondary-200 rounded-xl p-5">
+              <h3 class="font-semibold text-secondary-800 mb-1">Seasonal Notes</h3>
+              <p class="text-secondary-700 text-sm">{service.seasonalNotes}</p>
+            </div>
+          )}
+
+          <!-- Features -->
+          <h2 class="text-2xl font-bold text-neutral-900 font-heading mt-10 mb-6">What's Included</h2>
+          <ul class="space-y-3">
+            {service.features.map((feature) => (
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-secondary-500 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                <span class="text-neutral-700">{feature}</span>
+              </li>
+            ))}
+          </ul>
+
+          <!-- Process -->
+          <h2 class="text-2xl font-bold text-neutral-900 font-heading mt-10 mb-6">How It Works</h2>
+          <div class="space-y-4">
+            {service.process.map((step, i) => (
+              <div class="flex gap-4">
+                <div class="w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold text-sm shrink-0">
+                  {i + 1}
+                </div>
+                <div>
+                  <h3 class="font-semibold text-neutral-900">{step.step}</h3>
+                  <p class="text-neutral-600 text-sm mt-1">{step.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <!-- Common Issues -->
+          {service.commonIssues && service.commonIssues.length > 0 && (
+            <div class="mt-10">
+              <h2 class="text-2xl font-bold text-neutral-900 font-heading mb-4">Common Challenges We Solve</h2>
+              <ul class="space-y-2">
+                {service.commonIssues.map((issue) => (
+                  <li class="flex items-start gap-3">
+                    <svg class="w-5 h-5 text-primary-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span class="text-neutral-600">{issue}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+
+        <!-- Sidebar -->
+        <div class="space-y-6">
+          <!-- Pricing Card -->
+          <div class="bg-primary-50 border border-primary-200 rounded-xl p-6">
+            <h3 class="text-lg font-bold text-primary-900 font-heading mb-3">Pricing</h3>
+            <div class="text-2xl font-bold text-primary-700">{service.priceRange}</div>
+            <p class="mt-2 text-sm text-primary-600">Fixed-price quotes — no hidden extras.</p>
+            <a href={affiliateUrl} class="mt-4 block w-full text-center bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors text-sm">
+              Get a Free Quote
+            </a>
+            <a href={`tel:${siteConfig.phoneTel}`} class="mt-2 block w-full text-center border border-primary-400 text-primary-700 hover:bg-primary-100 font-semibold py-3 px-4 rounded-lg transition-colors text-sm">
+              Call {siteConfig.phoneDisplay}
+            </a>
+          </div>
+
+          <!-- Van Recommendation -->
+          {service.vanRecommendation && (
+            <div class="bg-white border border-neutral-200 rounded-xl p-6 shadow-sm">
+              <h3 class="text-lg font-bold text-neutral-900 font-heading mb-2">Recommended Van</h3>
+              <Badge variant="primary">{vanMap[service.vanRecommendation] ?? service.vanRecommendation}</Badge>
+              <p class="mt-3 text-sm text-neutral-600">This is the van we typically recommend for this type of job. Your exact requirements may vary — we'll confirm the best option when you book.</p>
+            </div>
+          )}
+
+          <!-- Service Areas -->
+          <div class="bg-white border border-neutral-200 rounded-xl p-6 shadow-sm">
+            <h3 class="text-lg font-bold text-neutral-900 font-heading mb-3">Service Areas</h3>
+            <div class="flex flex-wrap gap-2">
+              {['Sheffield City Centre', 'Crookes', 'Hillsborough', 'Ecclesall', 'Walkley', 'Nether Edge', 'Crosspool', 'Rotherham', 'Stocksbridge'].map((area) => (
+                <span class="text-xs bg-neutral-100 text-neutral-700 px-2 py-1 rounded">{area}</span>
+              ))}
+            </div>
+            <a href="/locations/" class="mt-4 inline-block text-primary-600 text-sm font-semibold hover:underline">View all areas →</a>
+          </div>
+        </div>
+      </div>
+    </Container>
+  </Section>
+
+  <!-- FAQs -->
+  <Section class="bg-neutral-50">
+    <Container>
+      <FAQAccordion faqs={service.faqs} />
+    </Container>
+  </Section>
+
+  <!-- Related Services -->
+  {related.length > 0 && (
+    <Section>
+      <Container>
+        <RelatedServices services={related} />
+      </Container>
+    </Section>
+  )}
+
+  <CTASection />
+</BaseLayout>

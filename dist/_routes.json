@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "include": [
+    "/*"
+  ],
+  "exclude": [
+    "/",
+    "/_astro/*",
+    "/favicon.svg",
+    "/robots.txt",
+    "/images/*",
+    "/about",
+    "/blog/*",
+    "/contact",
+    "/locations/*",
+    "/routes/*",
+    "/services/*",
+    "/sheffield-city-centre/*",
+    "/hillsborough/*",
+    "/crookes/*",
+    "/walkley/*",
+    "/nether-edge/*",
+    "/rotherham/*",
+    "/ecclesall/*",
+    "/crosspool/*",
+    "/woodseats/*",
+    "/gleadless/*",
+    "/beighton/*"
+  ]
+}

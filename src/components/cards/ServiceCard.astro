@@ -1,0 +1,37 @@
+---
+import ServiceIcon from '../ServiceIcon';
+import ArrowNarrowRightIcon from '../icons/arrow-narrow-right-icon';
+
+interface Props {
+  name: string;
+  slug: string;
+  description: string;
+  image: string;
+}
+
+const { name, slug, description, image } = Astro.props;
+---
+
+<a href={`/services/${slug}`} class="group block bg-white rounded-lg shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 overflow-hidden">
+  <div class="aspect-video overflow-hidden relative">
+    <img
+      src={image}
+      alt={`${name} service in Leeds`}
+      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+      width="400"
+      height="225"
+      loading="lazy"
+    />
+    <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-sm">
+      <ServiceIcon slug={slug} size={24} color="#1E3A5F" client:idle />
+    </div>
+  </div>
+  <div class="p-6">
+    <h3 class="text-xl font-semibold text-neutral-900 font-heading">{name}</h3>
+    <p class="mt-2 text-neutral-600 line-clamp-2">{description}</p>
+    <span class="mt-4 inline-flex items-center gap-1 text-accent font-medium group-hover:gap-2 transition-all">
+      Learn more
+      <ArrowNarrowRightIcon size={16} color="currentColor" client:idle />
+    </span>
+  </div>
+</a>

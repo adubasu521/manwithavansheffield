@@ -1,0 +1,26 @@
+---
+import LocationCard from '../cards/LocationCard.astro';
+import type { Location } from '../../data/locations';
+
+interface Props {
+  locations: Location[];
+  heading?: string;
+  subtitle?: string;
+}
+
+const { locations, heading = 'Areas We Cover', subtitle = 'Serving Leeds and the surrounding West Yorkshire and North Yorkshire area.' } = Astro.props;
+---
+
+<div>
+  {heading && (
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-neutral-900 font-heading">{heading}</h2>
+      {subtitle && <p class="mt-4 text-lg text-neutral-500 max-w-2xl mx-auto">{subtitle}</p>}
+    </div>
+  )}
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    {locations.map((loc) => (
+      <LocationCard name={loc.name} slug={loc.slug} postcodes={loc.postcodes} />
+    ))}
+  </div>
+</div>

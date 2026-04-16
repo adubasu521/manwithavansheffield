@@ -1,0 +1,231 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import HeroInner from '../../components/sections/HeroInner.astro';
+import FAQAccordion from '../../components/sections/FAQAccordion.astro';
+import CTASection from '../../components/sections/CTASection.astro';
+import NearbyAreas from '../../components/sections/NearbyAreas.astro';
+import GoogleMap from '../../components/sections/GoogleMap.astro';
+import SchemaLocalBusiness from '../../components/seo/SchemaLocalBusiness.astro';
+import SchemaFAQ from '../../components/seo/SchemaFAQ.astro';
+import Section from '../../components/ui/Section.astro';
+import Container from '../../components/ui/Container.astro';
+import Badge from '../../components/ui/Badge.astro';
+import { locations, getLocationBySlug, getNeighboringLocations } from '../../data/locations';
+import { services } from '../../data/services';
+import { affiliateUrl } from '../../data/site';
+
+export async function getStaticPaths() {
+  return locations.map((location) => ({
+    params: { location: location.slug },
+  }));
+}
+
+const { location: slug } = Astro.params;
+const location = getLocationBySlug(slug)!;
+const neighbors = getNeighboringLocations(location.neighboringAreas);
+
+const locationFaqs = [
+  {
+    question: `How much does a man and van cost in ${location.name}?`,
+    answer: `Man and van prices in ${location.name} typically start from around £20–£25 per hour for a self-loading job, or £40–£50 per hour with a two-man crew. Most local moves within ${location.name} or to nearby areas cost between £80 and £200 depending on the volume of items and how far you're going. We always provide a fixed price before we start, so there are no surprises.`,
+  },
+  {
+    question: `Do you cover the whole of ${location.name}?`,
+    answer: `Yes — we cover all of ${location.name} including the ${location.neighborhoods.slice(0, 3).join(', ')} areas. We're familiar with the local streets, parking restrictions, and access conditions. If you're moving to or from an address with unusual access, just mention it when you book and we'll make sure we bring the right van.`,
+  },
+  {
+    question: `What postcodes do you serve in ${location.name}?`,
+    answer: `We cover the ${location.postcodes.join(', ')} postcode${location.postcodes.length > 1 ? 's' : ''} for ${location.name}. We also frequently travel to neighbouring areas including ${location.neighboringAreas.slice(0, 3).join(', ')}. If your postcode isn't listed, give us a call and we'll confirm whether we can help.`,
+  },
+  {
+    question: `Do you offer same-day moves in ${location.name}?`,
+    answer: `We do offer same-day and next-day availability for most jobs in ${location.name}, subject to van and crew availability. Smaller jobs like single-item collections and one-bedroom flat moves are easiest to book at short notice. For larger house removals, we recommend booking at least a few days ahead to guarantee your preferred date and time.`,
+  },
+];
+---
+
+<BaseLayout
+  title={location.metaTitle}
+  description={location.metaDescription}
+  canonical={`https://manwithavansheffield.co.uk/locations/${location.slug}`}
+>
+  <SchemaLocalBusiness locationName={location.name} geo={location.geo} county={location.county} slot="head" />
+  <SchemaFAQ faqs={locationFaqs} slot="head" />
+
+  <HeroInner
+    title={`Man With A Van ${location.name}`}
+    subtitle={`Fixed-price removals and van hire in ${location.name}. Fully insured, locally-experienced team available 7 days a week.`}
+    breadcrumbs={[
+      { label: 'Home', href: '/' },
+      { label: 'Areas', href: '/locations' },
+      { label: location.name },
+    ]}
+  />
+
+  <Section>
+    <Container>
+      <div class="grid lg:grid-cols-3 gap-12">
+        <div class="lg:col-span-2">
+          <!-- Local Insight -->
+          <h2 class="text-2xl font-bold text-neutral-900 font-heading mb-4">Moving in {location.name}</h2>
+          <p class="text-lg text-neutral-600 leading-relaxed">{location.localInsight}</p>
+
+          <!-- Housing Type -->
+          <div class="mt-6 bg-primary-50 border border-primary-100 rounded-xl p-5">
+            <h3 class="font-semibold text-primary-900 mb-1">Local Housing Stock</h3>
+            <p class="text-primary-700 text-sm">{location.housingType}</p>
+          </div>
+
+          <!-- Access & Parking -->
+          <div class="mt-6 grid sm:grid-cols-2 gap-4">
+            <div class="bg-white border border-neutral-200 rounded-xl p-5 shadow-sm">
+              <h3 class="font-semibold text-neutral-900 mb-2 flex items-center gap-2">
+                <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+                </svg>
+                Van Access
+              </h3>
+              <p class="text-sm text-neutral-600">{location.accessNotes}</p>
+            </div>
+            <div class="bg-white border border-neutral-200 rounded-xl p-5 shadow-sm">
+              <h3 class="font-semibold text-neutral-900 mb-2 flex items-center gap-2">
+                <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                </svg>
+                Parking Info
+              </h3>
+              <p class="text-sm text-neutral-600">{location.parkingInfo}</p>
+            </div>
+          </div>
+
+          <!-- Postcodes & Neighbourhoods -->
+          <div class="mt-8">
+            <h2 class="text-2xl font-bold text-neutral-900 font-heading mb-4">Postcodes &amp; Neighbourhoods</h2>
+            <div class="flex flex-wrap gap-2 mb-4">
+              {location.postcodes.map((pc) => (
+                <Badge variant="primary">{pc}</Badge>
+              ))}
+            </div>
+            <div class="flex flex-wrap gap-2">
+              {location.neighborhoods.map((n) => (
+                <Badge variant="secondary">{n}</Badge>
+              ))}
+            </div>
+          </div>
+
+          <!-- Landmarks -->
+          {location.landmarks && location.landmarks.length > 0 && (
+            <div class="mt-8">
+              <h2 class="text-2xl font-bold text-neutral-900 font-heading mb-4">Local Landmarks</h2>
+              <div class="space-y-3">
+                {location.landmarks.map((lm) => (
+                  <div class="flex gap-3 bg-white border border-neutral-200 rounded-lg p-4">
+                    <div class="w-2 h-2 bg-primary-600 rounded-full shrink-0 mt-2"></div>
+                    <div>
+                      <span class="font-semibold text-neutral-900">{lm.name}</span>
+                      <span class="text-neutral-500 text-sm"> — {lm.type}</span>
+                      <p class="text-sm text-neutral-600 mt-1">{lm.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <!-- Testimonial -->
+          {location.testimonial && (
+            <div class="mt-8 bg-neutral-50 border border-neutral-200 rounded-xl p-6">
+              <div class="flex text-secondary-400 mb-3">
+                {Array.from({ length: location.testimonial.rating }).map(() => (
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                ))}
+              </div>
+              <blockquote class="text-neutral-700 italic">&ldquo;{location.testimonial.quote}&rdquo;</blockquote>
+              <p class="mt-2 text-sm font-semibold text-neutral-900">— {location.testimonial.author}, {location.testimonial.location}</p>
+            </div>
+          )}
+
+          <!-- Services in This Area -->
+          <div class="mt-8">
+            <h2 class="text-2xl font-bold text-neutral-900 font-heading mb-4">Services in {location.name}</h2>
+            <div class="grid sm:grid-cols-2 gap-3">
+              {services.slice(0, 6).map((svc) => {
+                const comboSlug = svc.slug.replace(/-sheffield$/, '');
+                return (
+                  <a href={`/${location.slug}/${comboSlug}`} class="flex items-center gap-3 bg-white border border-neutral-200 rounded-lg p-4 hover:border-primary-400 hover:shadow-sm transition-all group">
+                    <svg class="w-5 h-5 text-primary-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                    <span class="text-sm font-medium text-neutral-700 group-hover:text-primary-600">{svc.name} in {location.name}</span>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="space-y-6">
+          <!-- Quick Info -->
+          <div class="bg-primary-50 border border-primary-200 rounded-xl p-6">
+            <h3 class="text-lg font-bold text-primary-900 font-heading mb-4">Quick Info</h3>
+            <dl class="space-y-3 text-sm">
+              <div class="flex justify-between">
+                <dt class="text-primary-700 font-medium">County</dt>
+                <dd class="text-primary-900">{location.county}</dd>
+              </div>
+              <div class="flex justify-between">
+                <dt class="text-primary-700 font-medium">Distance from Sheffield</dt>
+                <dd class="text-primary-900">{location.distanceFromSheffield}</dd>
+              </div>
+              <div class="flex justify-between">
+                <dt class="text-primary-700 font-medium">Drive Time</dt>
+                <dd class="text-primary-900">{location.driveTime}</dd>
+              </div>
+              {location.studentArea && (
+                <div class="flex justify-between">
+                  <dt class="text-primary-700 font-medium">Student Area</dt>
+                  <dd class="text-green-700 font-semibold">Yes</dd>
+                </div>
+              )}
+            </dl>
+            <a href={affiliateUrl} class="mt-5 block w-full text-center bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors text-sm">
+              Get a Quote for {location.name}
+            </a>
+          </div>
+
+          <!-- Map -->
+          <div>
+            <h3 class="text-lg font-bold text-neutral-900 font-heading mb-3">Map</h3>
+            <GoogleMap
+              latitude={location.geo.latitude}
+              longitude={location.geo.longitude}
+              title={`Man With A Van ${location.name}`}
+              zoom={13}
+            />
+          </div>
+        </div>
+      </div>
+    </Container>
+  </Section>
+
+  <!-- FAQs -->
+  <Section class="bg-neutral-50">
+    <Container>
+      <FAQAccordion faqs={locationFaqs} />
+    </Container>
+  </Section>
+
+  <!-- Nearby Areas -->
+  {neighbors.length > 0 && (
+    <Section>
+      <Container>
+        <NearbyAreas locations={neighbors} heading={`Areas Near ${location.name}`} />
+      </Container>
+    </Section>
+  )}
+
+  <CTASection />
+</BaseLayout>

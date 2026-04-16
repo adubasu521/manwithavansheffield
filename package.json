@@ -1,0 +1,23 @@
+{
+  "name": "man-with-a-van-sheffield",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^12.3.0",
+    "@astrojs/react": "^5.0.0",
+    "@astrojs/sitemap": "^3.3.1",
+    "@tailwindcss/vite": "^4.1.4",
+    "astro": "^5.7.10",
+    "motion": "^12.38.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "resend": "^4.1.2",
+    "tailwindcss": "^4.1.4"
+  }
+}

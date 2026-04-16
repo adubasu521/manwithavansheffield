@@ -1,0 +1,224 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import HeroInner from '../../components/sections/HeroInner.astro';
+import FAQAccordion from '../../components/sections/FAQAccordion.astro';
+import CTASection from '../../components/sections/CTASection.astro';
+import NearbyAreas from '../../components/sections/NearbyAreas.astro';
+import GoogleMap from '../../components/sections/GoogleMap.astro';
+import SchemaFAQ from '../../components/seo/SchemaFAQ.astro';
+import SchemaBreadcrumb from '../../components/seo/SchemaBreadcrumb.astro';
+import Section from '../../components/ui/Section.astro';
+import Container from '../../components/ui/Container.astro';
+import { combinations, getCombination } from '../../data/combinations/index';
+import { getLocationBySlug, getNeighboringLocations } from '../../data/locations';
+import { getServiceBySlug, services } from '../../data/services';
+import { siteConfig, affiliateUrl } from '../../data/site';
+
+export async function getStaticPaths() {
+  return combinations.map((combo) => ({
+    params: {
+      location: combo.locationSlug,
+      service: combo.serviceSlug,
+    },
+  }));
+}
+
+const { location: locationSlug, service: serviceSlug } = Astro.params;
+const combo = getCombination(locationSlug, serviceSlug)!;
+
+// Look up full location data
+const location = getLocationBySlug(locationSlug)!;
+
+// Find the full service (service slug in combos doesn't have -leeds suffix)
+const fullServiceSlug = `${serviceSlug}-sheffield`;
+const service = getServiceBySlug(fullServiceSlug);
+
+// Neighbors for NearbyAreas
+const neighbors = getNeighboringLocations(location.neighboringAreas);
+
+// Service display name
+const serviceNames: Record<string, string> = {
+  'man-and-van': 'Man and Van',
+  'house-removals': 'House Removals',
+  'student-moves': 'Student Moves',
+  'ikea-delivery': 'IKEA Delivery',
+  'office-removals': 'Office Removals',
+  'furniture-delivery': 'Furniture Delivery',
+};
+const serviceName = serviceNames[serviceSlug] ?? serviceSlug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+const pageTitle = `${serviceName} in ${location.name}`;
+const metaTitle = `${serviceName} ${location.name} | Fixed Prices | Man With A Van Sheffield`;
+const metaDescription = `${serviceName} in ${location.name}. Fixed-price quotes, fully insured, available 7 days a week. Local expertise for ${location.name} streets, parking and access. ${combo.pricingNote.substring(0, 80)}.`;
+
+const breadcrumbs = [
+  { label: 'Home', url: 'https://manwithavansheffield.co.uk/' },
+  { label: 'Areas', url: 'https://manwithavansheffield.co.uk/locations/' },
+  { label: location.name, url: `https://manwithavansheffield.co.uk/locations/${locationSlug}/` },
+  { label: serviceName, url: `https://manwithavansheffield.co.uk/${locationSlug}/${serviceSlug}/` },
+];
+---
+
+<BaseLayout
+  title={metaTitle}
+  description={metaDescription}
+  canonical={`https://manwithavansheffield.co.uk/${locationSlug}/${serviceSlug}`}
+>
+  <SchemaFAQ faqs={combo.uniqueFaqs} slot="head" />
+  <SchemaBreadcrumb items={breadcrumbs} slot="head" />
+
+  <HeroInner
+    title={pageTitle}
+    subtitle={`Fixed-price ${serviceName.toLowerCase()} in ${location.name}. Locally-experienced team, fully insured, available 7 days a week.`}
+    breadcrumbs={[
+      { label: 'Home', href: '/' },
+      { label: 'Areas', href: '/locations/' },
+      { label: location.name, href: `/locations/${locationSlug}/` },
+      { label: serviceName },
+    ]}
+  />
+
+  <Section>
+    <Container>
+      <div class="grid lg:grid-cols-3 gap-12">
+        <div class="lg:col-span-2">
+
+          <!-- Unique Intro -->
+          <h2 class="text-2xl font-bold text-neutral-900 font-heading mb-4">{serviceName} in {location.name}</h2>
+          <p class="text-lg text-neutral-600 leading-relaxed">{combo.uniqueIntro}</p>
+
+          <!-- Local Tip -->
+          <div class="mt-6 bg-secondary-50 border-l-4 border-secondary-400 rounded-r-xl p-5">
+            <h3 class="font-bold text-secondary-900 mb-1">Local Tip</h3>
+            <p class="text-secondary-800 text-sm">{combo.localTip}</p>
+          </div>
+
+          <!-- Local Problems We Solve -->
+          <div class="mt-8">
+            <h2 class="text-2xl font-bold text-neutral-900 font-heading mb-4">Local Challenges We Handle</h2>
+            <ul class="space-y-3">
+              {combo.localProblems.map((problem) => (
+                <li class="flex items-start gap-3">
+                  <svg class="w-5 h-5 text-primary-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  <span class="text-neutral-700">{problem}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <!-- Service Features (from parent service if available) -->
+          {service && service.features && (
+            <div class="mt-8">
+              <h2 class="text-2xl font-bold text-neutral-900 font-heading mb-4">What's Included</h2>
+              <ul class="space-y-2">
+                {service.features.map((feature) => (
+                  <li class="flex items-start gap-3">
+                    <svg class="w-5 h-5 text-secondary-500 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    <span class="text-neutral-600 text-sm">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <!-- Related Services in this Location -->
+          <div class="mt-8">
+            <h2 class="text-2xl font-bold text-neutral-900 font-heading mb-4">Other Services in {location.name}</h2>
+            <div class="grid sm:grid-cols-2 gap-3">
+              {combo.relatedCombosInArea.map((slug) => {
+                const [locSlug, svcSlug] = slug.split('/');
+                const svcName = serviceNames[svcSlug] ?? svcSlug;
+                return (
+                  <a
+                    href={`/${locSlug}/${svcSlug}`}
+                    class="flex items-center gap-2 text-sm text-primary-600 hover:text-primary-800 font-medium p-3 bg-primary-50 rounded-lg hover:bg-primary-100 transition-colors"
+                  >
+                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                    {svcName} in {location.name}
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="space-y-6">
+          <!-- Pricing Card -->
+          <div class="bg-primary-50 border border-primary-200 rounded-xl p-6">
+            <h3 class="text-lg font-bold text-primary-900 font-heading mb-3">Pricing</h3>
+            <p class="text-sm text-primary-700">{combo.pricingNote}</p>
+            <a href={affiliateUrl} class="mt-4 block w-full text-center bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors text-sm">
+              Get a Free Quote
+            </a>
+            <a href={`tel:${siteConfig.phoneTel}`} class="mt-2 block w-full text-center border border-primary-400 text-primary-700 hover:bg-primary-100 font-semibold py-3 px-4 rounded-lg transition-colors text-sm">
+              Call {siteConfig.phoneDisplay}
+            </a>
+          </div>
+
+          <!-- Location Info -->
+          <div class="bg-white border border-neutral-200 rounded-xl p-6 shadow-sm">
+            <h3 class="text-lg font-bold text-neutral-900 font-heading mb-3">{location.name} Info</h3>
+            <dl class="space-y-2 text-sm">
+              <div>
+                <dt class="text-neutral-500 text-xs uppercase tracking-wide mb-0.5">Postcodes</dt>
+                <dd class="font-medium text-neutral-800">{location.postcodes.join(', ')}</dd>
+              </div>
+              <div>
+                <dt class="text-neutral-500 text-xs uppercase tracking-wide mb-0.5">Parking</dt>
+                <dd class="text-neutral-600">{location.parkingInfo}</dd>
+              </div>
+              <div>
+                <dt class="text-neutral-500 text-xs uppercase tracking-wide mb-0.5">Van Access</dt>
+                <dd class="text-neutral-600">{location.accessNotes}</dd>
+              </div>
+            </dl>
+            <a href={`/locations/${locationSlug}`} class="mt-4 inline-block text-primary-600 text-sm font-semibold hover:underline">
+              Full {location.name} guide →
+            </a>
+          </div>
+
+          <!-- Map -->
+          <div>
+            <GoogleMap
+              latitude={location.geo.latitude}
+              longitude={location.geo.longitude}
+              title={`${serviceName} in ${location.name}`}
+              zoom={13}
+            />
+          </div>
+        </div>
+      </div>
+    </Container>
+  </Section>
+
+  <!-- FAQs -->
+  <Section class="bg-neutral-50">
+    <Container>
+      <FAQAccordion faqs={combo.uniqueFaqs} />
+    </Container>
+  </Section>
+
+  <!-- Nearby Combos -->
+  {neighbors.length > 0 && (
+    <Section>
+      <Container>
+        <NearbyAreas
+          locations={neighbors}
+          currentService={serviceSlug}
+          heading={`${serviceName} in Nearby Areas`}
+        />
+      </Container>
+    </Section>
+  )}
+
+  <CTASection
+    heading={`Book Your ${serviceName} in ${location.name}`}
+    subtitle={`Fixed price, fully insured, available 7 days a week. Get a quote today for your ${location.name} move.`}
+  />
+</BaseLayout>

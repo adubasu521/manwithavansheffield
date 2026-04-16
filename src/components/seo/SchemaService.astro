@@ -1,0 +1,43 @@
+---
+import { siteConfig } from '../../data/site';
+
+interface Props {
+  serviceName: string;
+  serviceDescription: string;
+  areaServed?: string;
+  county?: string;
+  priceRange?: string;
+  image?: string;
+}
+
+const { serviceName, serviceDescription, areaServed, county = 'West Yorkshire', priceRange, image } = Astro.props;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: serviceName,
+  description: serviceDescription,
+  provider: {
+    '@type': 'MovingCompany',
+    name: siteConfig.name,
+    telephone: siteConfig.phoneTel,
+    url: siteConfig.url,
+  },
+  areaServed: areaServed
+    ? { '@type': 'City', name: areaServed, containedInPlace: { '@type': 'AdministrativeArea', name: county } }
+    : { '@type': 'AdministrativeArea', name: 'West Yorkshire' },
+  ...(image && { image: image.startsWith('http') ? image : `${siteConfig.url}${image}` }),
+  offers: {
+    '@type': 'Offer',
+    availability: 'https://schema.org/InStock',
+    ...(priceRange && {
+      priceSpecification: {
+        '@type': 'PriceSpecification',
+        priceCurrency: 'GBP',
+      },
+    }),
+  },
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

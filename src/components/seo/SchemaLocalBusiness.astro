@@ -1,0 +1,47 @@
+---
+import { siteConfig } from '../../data/site';
+
+interface Props {
+  locationName: string;
+  geo: { latitude: number; longitude: number };
+  county?: string;
+}
+
+const { locationName, geo, county = 'South Yorkshire' } = Astro.props;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'MovingCompany',
+  name: `${siteConfig.name} - ${locationName}`,
+  url: siteConfig.url,
+  telephone: siteConfig.phoneTel,
+  email: siteConfig.email,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: locationName,
+    addressRegion: county,
+    addressCountry: 'GB',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: geo.latitude,
+    longitude: geo.longitude,
+  },
+  areaServed: {
+    '@type': 'City',
+    name: locationName,
+    containedInPlace: { '@type': 'AdministrativeArea', name: county },
+  },
+  openingHoursSpecification: siteConfig.hours
+    .filter((h) => h.hours !== 'Closed')
+    .map((h) => ({
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: h.day,
+      opens: '07:00',
+      closes: '19:00',
+    })),
+  priceRange: '££',
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

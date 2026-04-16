@@ -1,0 +1,24 @@
+---
+interface Props {
+  latitude: number;
+  longitude: number;
+  title?: string;
+  zoom?: number;
+}
+
+const { latitude, longitude, title = 'Man With A Van Leeds', zoom = 12 } = Astro.props;
+const mapSrc = `https://www.google.com/maps?q=${latitude},${longitude}&z=${zoom}&output=embed`;
+---
+
+<div class="rounded-lg overflow-hidden shadow-sm">
+  <iframe
+    src={mapSrc}
+    width="100%"
+    height="400"
+    style="border:0"
+    allowfullscreen
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"
+    title={`Map showing ${title} service area`}
+  ></iframe>
+</div>

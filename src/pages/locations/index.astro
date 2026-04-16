@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import HeroInner from '../../components/sections/HeroInner.astro';
+import LocationGrid from '../../components/sections/LocationGrid.astro';
+import CTASection from '../../components/sections/CTASection.astro';
+import Section from '../../components/ui/Section.astro';
+import Container from '../../components/ui/Container.astro';
+import { locations } from '../../data/locations';
+
+const sheffieldDistricts = locations.filter(l =>
+  !['rotherham', 'stocksbridge'].includes(l.slug)
+);
+const widerArea = locations.filter(l =>
+  ['rotherham', 'stocksbridge'].includes(l.slug)
+);
+---
+
+<BaseLayout
+  title="Areas We Cover | Man With A Van Sheffield"
+  description="Man With A Van Sheffield covers all Sheffield districts (S1–S36) and surrounding South Yorkshire towns. Find your area and get a fixed-price quote for removals, man and van, student moves and more."
+  canonical="https://manwithavansheffield.co.uk/locations/"
+>
+  <HeroInner
+    title="Areas We Cover"
+    subtitle="We serve all Sheffield districts and the wider South Yorkshire region. Local knowledge means no wasted time navigating Supertram restrictions, gradient streets, or student permit zones."
+    breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Areas' }]}
+  />
+
+  <Section>
+    <Container>
+      <div class="mb-12">
+        <h2 class="text-2xl font-bold text-neutral-900 font-heading mb-2">Sheffield Districts</h2>
+        <p class="text-neutral-600 mb-8">All S postcodes covered — from the student terraces of S10 and S6 to the Peak District fringe of S17. We know the gradient streets, the Supertram loading zones, and which roads fit a Luton van.</p>
+        <LocationGrid locations={sheffieldDistricts} />
+      </div>
+
+      {widerArea.length > 0 && (
+        <div>
+          <h2 class="text-2xl font-bold text-neutral-900 font-heading mb-2">Wider South Yorkshire</h2>
+          <p class="text-neutral-600 mb-8">We also serve Rotherham, Stocksbridge, and the wider South Yorkshire area — including Doncaster and Barnsley for larger jobs. Great coverage for both local and longer-distance moves.</p>
+          <LocationGrid locations={widerArea} />
+        </div>
+      )}
+    </Container>
+  </Section>
+
+  <!-- Coverage Map Info -->
+  <Section class="bg-neutral-50">
+    <Container>
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="text-2xl font-bold text-neutral-900 font-heading">Not Listed? We Still Might Cover You</h2>
+        <p class="mt-4 text-neutral-600">
+          We cover a wide radius around Sheffield and are happy to travel to areas not listed here for larger jobs. If you're moving to or from somewhere in South Yorkshire, Derbyshire, or planning a long-distance move, get in touch and we'll confirm availability and pricing.
+        </p>
+        <div class="mt-8 flex flex-wrap justify-center gap-4">
+          <a href="/contact/" class="bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+            Check Your Area
+          </a>
+          <a href="/routes/" class="border border-primary-600 text-primary-600 hover:bg-primary-50 font-semibold py-3 px-6 rounded-lg transition-colors">
+            Long-Distance Routes
+          </a>
+        </div>
+      </div>
+    </Container>
+  </Section>
+
+  <CTASection />
+</BaseLayout>

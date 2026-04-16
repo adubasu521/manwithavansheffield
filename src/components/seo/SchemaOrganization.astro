@@ -1,0 +1,48 @@
+---
+import { siteConfig } from '../../data/site';
+import { locations } from '../../data/locations';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'MovingCompany',
+  name: siteConfig.name,
+  url: siteConfig.url,
+  logo: `${siteConfig.url}/images/logo.png`,
+  telephone: siteConfig.phoneTel,
+  email: siteConfig.email,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: siteConfig.address.city,
+    addressRegion: siteConfig.address.region,
+    postalCode: siteConfig.address.postcode,
+    addressCountry: siteConfig.address.country,
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: siteConfig.geo.latitude,
+    longitude: siteConfig.geo.longitude,
+  },
+  areaServed: locations.map((loc) => ({
+    '@type': 'City',
+    name: loc.name,
+    containedInPlace: { '@type': 'AdministrativeArea', name: loc.county },
+  })),
+  openingHoursSpecification: siteConfig.hours
+    .filter((h) => h.hours !== 'Closed')
+    .map((h) => ({
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: h.day,
+      opens: '07:00',
+      closes: '19:00',
+    })),
+  priceRange: '££',
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: siteConfig.stats.averageRating,
+    reviewCount: 500,
+    bestRating: 5,
+  },
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

@@ -1,0 +1,158 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroInner from '../components/sections/HeroInner.astro';
+import CTASection from '../components/sections/CTASection.astro';
+import VanFleet from '../components/sections/VanFleet.astro';
+import Section from '../components/ui/Section.astro';
+import Container from '../components/ui/Container.astro';
+import { siteConfig } from '../data/site';
+---
+
+<BaseLayout
+  title="About Man With A Van Sheffield | Locally-Owned, Fully Insured"
+  description="Locally-owned man and van service based in Sheffield. CRB-checked drivers, goods-in-transit insurance, fixed-price quotes. Serving Sheffield and South Yorkshire."
+  canonical="https://manwithavansheffield.co.uk/about/"
+>
+  <HeroInner
+    title="About Man With A Van Sheffield"
+    subtitle="Locally-owned, locally-run. We know Sheffield's gradient streets, tram restrictions, and student move calendar better than any national operator."
+    breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'About' }]}
+  />
+
+  <!-- About Intro -->
+  <Section>
+    <Container>
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-3xl font-bold text-neutral-900 font-heading mb-6">Who We Are</h2>
+          <div class="space-y-4 text-neutral-600 text-lg leading-relaxed">
+            <p>
+              Man With A Van Sheffield is a locally-run removal and van hire business based in Sheffield, South Yorkshire. We started with a single LWB van and a simple principle: give people a fair, fixed price and do the job properly. Since then, we've grown to a fleet of three vans — LWB, Sprinter, and Luton — and completed over {siteConfig.stats.movesCompleted} moves across Sheffield and beyond.
+            </p>
+            <p>
+              Unlike national removal companies, we don't use subcontractors or agency drivers. Every job is handled by our own trained team, using our own insured vehicles. When you call or email us, you speak to the people who will actually be moving you — not a booking agent.
+            </p>
+            <p>
+              We're Sheffield people. We know the gradient streets of Crookes and Walkley, the Supertram loading restrictions in the city centre, the student move calendar around University of Sheffield and Sheffield Hallam, and the fastest route from Meadowhall IKEA to every postcode in S1–S36. That local knowledge saves time — and time costs money.
+            </p>
+          </div>
+        </div>
+        <div class="bg-primary-50 rounded-2xl p-8">
+          <div class="grid grid-cols-2 gap-6">
+            <div class="text-center">
+              <div class="text-4xl font-bold text-primary-700 font-heading">{siteConfig.stats.movesCompleted}</div>
+              <div class="text-sm text-primary-600 mt-1">Moves Completed</div>
+            </div>
+            <div class="text-center">
+              <div class="text-4xl font-bold text-primary-700 font-heading">{siteConfig.stats.averageRating}/5</div>
+              <div class="text-sm text-primary-600 mt-1">Average Rating</div>
+            </div>
+            <div class="text-center">
+              <div class="text-4xl font-bold text-primary-700 font-heading">{siteConfig.stats.reviews}</div>
+              <div class="text-sm text-primary-600 mt-1">Customer Reviews</div>
+            </div>
+            <div class="text-center">
+              <div class="text-4xl font-bold text-primary-700 font-heading">{siteConfig.stats.yearsActive}</div>
+              <div class="text-sm text-primary-600 mt-1">Years in Sheffield</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Container>
+  </Section>
+
+  <!-- Why Choose Us -->
+  <Section class="bg-neutral-50">
+    <Container>
+      <h2 class="text-3xl font-bold text-neutral-900 font-heading text-center mb-12">Our Commitments</h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-neutral-900 mb-2">Fully Insured</h3>
+          <p class="text-neutral-600 text-sm">We carry goods-in-transit insurance and public liability insurance on every single job. Your belongings are covered for the full value of the move, not just a flat cap.</p>
+        </div>
+
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-neutral-900 mb-2">CRB-Checked Drivers</h3>
+          <p class="text-neutral-600 text-sm">All of our drivers and removal team members are CRB (DBS) checked. We vet everyone who enters your home. You can trust our team with your keys, your belongings, and your property.</p>
+        </div>
+
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-neutral-900 mb-2">Fixed-Price Quotes</h3>
+          <p class="text-neutral-600 text-sm">We quote a total fixed price before we start. No hourly meter surprises, no add-on charges for stairs or distances. What we quote is what you pay — guaranteed.</p>
+        </div>
+
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-neutral-900 mb-2">7 Days a Week</h3>
+          <p class="text-neutral-600 text-sm">We're available every day of the week including weekends and bank holidays. Saturday Sheffield moves often have lighter traffic in the suburbs — we help you take advantage of that.</p>
+        </div>
+
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-neutral-900 mb-2">Same-Day Available</h3>
+          <p class="text-neutral-600 text-sm">Many local Sheffield jobs can be booked same-day or next-day. If you call before 10 AM, we can often fit you in that afternoon for single-item collections or studio flat moves.</p>
+        </div>
+
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-neutral-900 mb-2">Sheffield Local Knowledge</h3>
+          <p class="text-neutral-600 text-sm">We know every postcode in Sheffield. The Supertram restrictions, the student permit zones in S10, the gradient streets in Crosspool and Crookes, and the quickest route from Meadowhall IKEA to your door.</p>
+        </div>
+      </div>
+    </Container>
+  </Section>
+
+  <!-- Van Fleet -->
+  <Section>
+    <Container>
+      <VanFleet />
+    </Container>
+  </Section>
+
+  <!-- Service Area -->
+  <Section class="bg-neutral-50">
+    <Container>
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="text-3xl font-bold text-neutral-900 font-heading mb-4">Our Service Area</h2>
+        <p class="text-lg text-neutral-600 mb-8">
+          We're based in Sheffield and primarily serve South Yorkshire. Our most common service areas include all Sheffield districts (S1–S36), Rotherham, Doncaster, Barnsley, and the Peak District fringe. For long-distance moves, we travel anywhere in the UK.
+        </p>
+        <div class="flex flex-wrap justify-center gap-2">
+          {['Sheffield City Centre', 'Crookes', 'Hillsborough', 'Ecclesall', 'Nether Edge', 'Walkley', 'Crosspool', 'Woodseats', 'Gleadless', 'Rotherham', 'Stocksbridge', 'Totley', 'Dore', 'Fulwood', 'Beighton', 'Mosborough'].map((area) => (
+            <span class="bg-primary-100 text-primary-800 text-sm font-medium px-3 py-1 rounded-full">{area}</span>
+          ))}
+        </div>
+        <a href="/locations/" class="mt-6 inline-block text-primary-600 font-semibold hover:underline">View all areas →</a>
+      </div>
+    </Container>
+  </Section>
+
+  <CTASection />
+</BaseLayout>

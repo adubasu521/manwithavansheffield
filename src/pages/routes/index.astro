@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import HeroInner from '../../components/sections/HeroInner.astro';
+import CTASection from '../../components/sections/CTASection.astro';
+import Section from '../../components/ui/Section.astro';
+import Container from '../../components/ui/Container.astro';
+import { routes } from '../../data/routes';
+---
+
+<BaseLayout
+  title="Long-Distance Removal Routes from Sheffield | Man With A Van Sheffield"
+  description="Fixed-price long-distance removal routes from Sheffield. Man and van to London, Manchester, Leeds, Edinburgh, Birmingham, Bristol and more. Dedicated van, fully insured, no shared loads."
+  canonical="https://manwithavansheffield.co.uk/routes/"
+>
+  <HeroInner
+    title="Long-Distance Routes from Sheffield"
+    subtitle="Fixed-price, dedicated van service for long-distance moves from Sheffield to cities across the UK. Direct M1 access makes us ideally placed for UK-wide moves. No shared loads, no hidden mileage costs."
+    breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Routes' }]}
+  />
+
+  <Section>
+    <Container>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {routes.map((route) => (
+          <a
+            href={`/routes/${route.slug}/`}
+            class="group bg-white rounded-xl shadow-sm border border-neutral-200 p-6 hover:shadow-md hover:border-primary-300 transition-all"
+          >
+            <div class="flex items-center gap-2 mb-3">
+              <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+              </svg>
+              <span class="text-xs font-semibold text-primary-600 uppercase tracking-wide">Long Distance</span>
+            </div>
+            <h2 class="text-xl font-bold text-neutral-900 font-heading group-hover:text-primary-600 transition-colors">
+              Sheffield → {route.to}
+            </h2>
+            <div class="mt-3 flex flex-wrap gap-3">
+              <div class="text-sm text-neutral-600">
+                <span class="font-medium text-neutral-800">{route.distance}</span>
+              </div>
+              <div class="text-neutral-400">·</div>
+              <div class="text-sm text-neutral-600">
+                {route.driveTime}
+              </div>
+              <div class="text-neutral-400">·</div>
+              <div class="text-sm font-semibold text-primary-700">
+                From {route.typicalCost.split('-')[0]}
+              </div>
+            </div>
+            <p class="mt-3 text-sm text-neutral-600 line-clamp-2">{route.intro.substring(0, 120)}…</p>
+            <div class="mt-4 text-primary-600 text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
+              View details
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </a>
+        ))}
+      </div>
+    </Container>
+  </Section>
+
+  <!-- Why Fixed Price -->
+  <Section class="bg-neutral-50">
+    <Container>
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-2xl font-bold text-neutral-900 font-heading mb-6 text-center">Why Choose a Fixed-Price Long-Distance Move?</h2>
+        <div class="grid sm:grid-cols-2 gap-6">
+          <div class="bg-white rounded-xl p-6 shadow-sm border border-neutral-200">
+            <h3 class="font-bold text-neutral-900 mb-2">No Shared Loads</h3>
+            <p class="text-sm text-neutral-600">Your belongings travel alone in our van — not mixed with other customers' items. No waiting for a second stop, no risk of mix-ups or delays.</p>
+          </div>
+          <div class="bg-white rounded-xl p-6 shadow-sm border border-neutral-200">
+            <h3 class="font-bold text-neutral-900 mb-2">Fixed Price Guaranteed</h3>
+            <p class="text-sm text-neutral-600">We quote you a total price before the job starts. No meter running, no mileage add-ons, no waiting time charges for traffic on the M1.</p>
+          </div>
+          <div class="bg-white rounded-xl p-6 shadow-sm border border-neutral-200">
+            <h3 class="font-bold text-neutral-900 mb-2">Fully Insured</h3>
+            <p class="text-sm text-neutral-600">Goods-in-transit insurance covers your belongings for the full journey. We're also fully insured for driving through ULEZ, Congestion Charge and Clean Air Zones.</p>
+          </div>
+          <div class="bg-white rounded-xl p-6 shadow-sm border border-neutral-200">
+            <h3 class="font-bold text-neutral-900 mb-2">Door to Door</h3>
+            <p class="text-sm text-neutral-600">We collect from your home in Sheffield and deliver directly to your new address — wherever in the UK it is. Direct M1 access from Sheffield makes us ideally placed for long-haul moves.</p>
+          </div>
+        </div>
+      </div>
+    </Container>
+  </Section>
+
+  <CTASection
+    heading="Ready to Book Your Long-Distance Move?"
+    subtitle="Get a fixed-price quote for your route from Sheffield. We'll confirm availability and give you a total cost — no surprises."
+  />
+</BaseLayout>

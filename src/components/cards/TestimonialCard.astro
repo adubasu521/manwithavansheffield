@@ -1,0 +1,23 @@
+---
+import StarRating from '../StarRating';
+
+interface Props {
+  quote: string;
+  author: string;
+  location: string;
+  rating?: number;
+}
+
+const { quote, author, location, rating = 5 } = Astro.props;
+---
+
+<div class="bg-secondary-50 rounded-lg p-8">
+  <div class="mb-4">
+    <StarRating rating={rating} size={20} color="#F59E0B" client:idle />
+  </div>
+  <blockquote class="text-lg text-neutral-700 italic leading-relaxed">"{quote}"</blockquote>
+  <div class="mt-4">
+    <p class="font-semibold text-neutral-900">{author}</p>
+    <p class="text-sm text-neutral-500">{location}</p>
+  </div>
+</div>
