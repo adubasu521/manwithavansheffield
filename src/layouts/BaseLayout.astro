@@ -40,9 +40,9 @@ const { title, description, canonical, ogImage, ogType, noindex } = Astro.props;
     <slot name="head" />
     <!-- Google Analytics 4 -->
     <script async src={`https://www.googletagmanager.com/gtag/js?id=${siteConfig.ga4Id}`}></script>
-    <script define:vars={{ ga4Id: siteConfig.ga4Id }}>
+    <script is:inline define:vars={{ ga4Id: siteConfig.ga4Id }}>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+      window.gtag = function(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', ga4Id);
     </script>
